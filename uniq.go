@@ -2,16 +2,28 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
+	"bufio"
+	"runtime"
 )
 
 func main(){
 	fmt.Println("uniq utility in Golang")
-	content, err := ioutil.ReadFile("testdata/sample.txt")
+	fmt.Println("Runtime " + runtime.GOOS)
+	file, err := os.Open("testdata/sample.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%s", content)
-	fmt.Println()
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan(){
+		fmt.Println(scanner.Text())
+		//fmt.Println()
+	}
+	
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
