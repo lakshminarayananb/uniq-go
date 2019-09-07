@@ -1,0 +1,4 @@
+I like Go
+I like C# too
+I like Go
+I don't like javascript

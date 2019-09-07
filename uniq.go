@@ -38,16 +38,15 @@ func main(){
 		count += 1		
 	}
 
-	fmt.Println(strings.Join(newLines,"\n"))
-
 	fileo, err := os.Create("testdata/output.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer fileo.Close()
-	
-	n, err := fileo.WriteString(strings.Join(newLines,"\n"))
-	fmt.Println(n)
+
+	fileo.WriteString(strings.Join(newLines,"\n"))
+
+	fmt.Println("output saved as output.txt")
 	
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
