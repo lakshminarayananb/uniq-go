@@ -5,23 +5,49 @@ import (
 	"log"
 	"os"
 	"bufio"
-	"runtime"
+	"strings"
 )
 
 func main(){
 	fmt.Println("uniq utility in Golang")
-	fmt.Println("Runtime " + runtime.GOOS)
 	file, err := os.Open("testdata/sample.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
+	var lines []string
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan(){
-		fmt.Println(scanner.Text())
-		//fmt.Println()
+		lineText := scanner.Text()
+		lines = append(lines,lineText)
 	}
+
+	count := 0
+	var newLines []string
+
+	for count < len(lines){
+		if count > 0 {
+			if lines[count] != lines[count-1] {
+				newLines = append(newLines, lines[count])
+			}
+		} else {
+			newLines = append(newLines, lines[count])
+		}
+		count += 1		
+	}
+
+	fmt.Println(strings.Join(newLines,"\n"))
+
+	fileo, err := os.Create("testdata/output.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fileo.Close()
+	
+	n, err := fileo.WriteString(strings.Join(newLines,"\n"))
+	fmt.Println(n)
 	
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
